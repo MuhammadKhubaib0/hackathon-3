@@ -6,6 +6,7 @@ import { client } from "@/sanity/lib/sanityClient";
 import { urlFor } from "@/sanity/lib/imageUrl";
 import Image from "next/image";
 import { addToCart } from "../actions/action";
+import Swal from "sweetalert2";
 
 interface Product {
   _id: string;
@@ -59,6 +60,13 @@ export default function ProductList() {
 
   const handleAddtoCart = (e: React.MouseEvent, product : Product) =>{
     e.preventDefault();
+    Swal.fire({
+              position : "top-right",
+              icon : "success",
+              title : `${product.title} has been added to cart`,
+              showConfirmButton : false,
+              timer : 1500
+            })
     addToCart(product);
     
     

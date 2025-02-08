@@ -213,9 +213,9 @@ import { getCartItems } from "../actions/action";
 import Link from "next/link";
 import { Product } from "../types/product";
 import { urlFor } from "@/sanity/lib/imageUrl";
-import { CgChevronRight } from "react-icons/cg";
 import { client } from "@/sanity/lib/sanityClient";
 import Swal from "sweetalert2";
+import { CgChevronRight } from "react-icons/cg";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState<Product[]>([]);
