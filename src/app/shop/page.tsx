@@ -1,91 +1,121 @@
-import MainProducts from "@/components/MainProducts";
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import React from "react";
+import { client } from "@/sanity/lib/sanityClient";
+import { urlFor } from "@/sanity/lib/imageUrl";
+import Image from "next/image";
+import { addToCart } from "../actions/action";
 
+interface Product {
+  _id: string;
+  slug: { _type: "slug"; current: string };
+  title: string;
+  description: string;
+  productname: string;
+  _type: "product";
+  inventory: number;
+  price: number;
+  tags: string[];
+  productImage: {
+    asset: {
+      _ref: string;
+    };
+  };
+}
 
-const page = () => {
+export default function ProductList() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const query = `*[_type == "product"] {
+          _id,
+          slug { current },
+          title,
+          description,
+          price,
+          tags,
+          productImage { asset { _ref } }
+        }`;
+
+        const data: Product[] = await client.fetch(query);
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center py-10">Loading products...</div>;
+  }
+
+  const handleAddtoCart = (e: React.MouseEvent, product : Product) =>{
+    e.preventDefault();
+    addToCart(product);
+    
+    
+  }
+
   return (
-    <div className="max-sm:overflow-x-hidden overflow-x-clip">
-      <div className="">
-        <Image  width={1440} height={328} 
-          src="/images/shop-bg.png"
-          alt="banner"
-          className="relative flex justify-center items-center blur-sm"
-        />
-        <div className="absolute inset-0 flex flex-col justify-center items-center gap-4 -translate-y-20 max-sm:-translate-y-[340px] max-sm:scale-50">
-          <h1 className="font-semibold text-5xl text-black">Shop</h1>
-          <p className="font-light text-lg text-black flex gap-4">
-            <span className="font-medium">
-              <Link href="/">Home</Link>
-            </span>{" "}
-            / <span className="">Shop</span>
-          </p>
-        </div>
-      </div>
-      <div className="bg-[#F9F1E7] px-24 flex items-center justify-between py-4 max-sm:py-1 max-sm:px-0 max-sm:justify-around max-sm:gap-5">
-        <div className="flex items-center gap-4 max-sm:gap-2 max-sm:scale-50">
-          <div className="text-[20px] flex items-center gap-2">
-            <Image  width={21} height={18}  src="/images/icons/filter.png" alt="icon" className="size-5" />
-            Filter
-          </div>
-          <div>
-            <Image  width={28} height={28}  src="/images/icons/gridview.png" alt="listview" />
-          </div>
-          <div className="border-r border-r-gray-400 pr-3">
-            <Image  width={24} height={24}  src="/images/icons/listview.png" alt="listview" />
-          </div>
-          <div className="text-lg ">Showing 12–38</div>
-        </div>
-        <div className="flex items-center text-[20px] gap-8 max-sm:gap-4 max-sm:scale-50">
-          <div className="">
-            Show{" "}
-            <input
-              type="number"
-              placeholder="16"
-              className="w-[50px]  placeholder-[#9F9F9F] py-2 pl-3 bg-[#FFFFFF]"
-            />
-          </div>
-          <div className="">
-            Sort By{" "}
-            <input
-              type="text"
-              placeholder="Default"
-              className="w-[178px]   placeholder-[#9F9F9F] py-2 pl-3 bg-[#FFFFFF]"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="pt-16 pb-16 max-sm:py-0">
-        <MainProducts />
-        <MainProducts />
-        <MainProducts />
-        <MainProducts />
-      </div>
-      <div className="flex gap-6 justify-center items-center">
-        <button className="text-[16px] rounded-lg #F9F1E7 text-black bg-[#F9F1E7] focus:bg-[#B88E2F] focus:text-[#F9F1E7] hover:bg-[#B88E2F] hover:text-[#F9F1E7] h-14 w-14 p-1">
-          1
-        </button>
-        <button className="text-[16px] rounded-lg #F9F1E7 text-black bg-[#F9F1E7] focus:bg-[#B88E2F] focus:text-[#F9F1E7] hover:bg-[#B88E2F] hover:text-[#F9F1E7] h-14 w-14 p-1">
-          2
-        </button>
-        <button className="text-[16px] rounded-lg #F9F1E7 text-black bg-[#F9F1E7] focus:bg-[#B88E2F] focus:text-[#F9F1E7] hover:bg-[#B88E2F] hover:text-[#F9F1E7] h-14 w-14 p-1">
-          3
-        </button>
-        <button className="text-[16px] rounded-lg #F9F1E7 text-black bg-[#F9F1E7] focus:bg-[#B88E2F] focus:text-[#F9F1E7] hover:bg-[#B88E2F] hover:text-[#F9F1E7] h-14 w-24 p-1">
-          Next
-        </button>
-      </div>
-      <div className="bg-[#FAF3EA] mt-16">
-        <div className="grid grid-cols-4 max-sm:grid-cols-2 px-14 py-28  items-center scale-90 gap-12 max-sm:scale-100 max-sm:py-14 max-sm:px-7">
-          <Image  width={337} height={70}  src="/images/service1.png" alt="Services" />
-          <Image  width={329} height={70}  src="/images/service2.png" alt="Services" />
-          <Image  width={245} height={70}  src="/images/service3.png" alt="Services" />
-          <Image  width={259} height={70}  src="/images/service4.png" alt="Services" />
-        </div>
+    <div className="container mx-auto p-6">
+      <h1 className="text-4xl font-bold text-center mb-8">Our Products</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {products.map((product) => {
+          const imageUrl = product.productImage?.asset?._ref
+            ? urlFor(product.productImage.asset)
+            : "";
+
+          return (
+            <Link key={product._id} href={`/shop/${product.slug.current}`}>
+              <div className="bg-white shadow-lg rounded-lg p-4 cursor-pointer transition-transform transform hover:scale-105">
+                {imageUrl && (
+                  <Image
+                    src={imageUrl}
+                    alt={product.title}
+                    width={300}
+                    height={300}
+                    className="rounded-lg w-full h-64 object-cover"
+                    priority
+                  />
+                )}
+                <h2 className="text-xl font-semibold mt-4">{product.title}</h2>
+                <p className="text-gray-600 text-sm mt-2 truncate">
+                  {product.description.length > 100
+                    ? product.description.slice(0, 100) + "..."
+                    : product.description}
+                </p>
+                <p className="text-gray-900 font-bold text-lg mt-3">
+                  ${product.price}
+                </p>
+                <div className="flex flex-wrap mt-3">
+                  {product.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full mr-2 mb-2"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <button
+                className="bg-gradient-to-r from-blue-500 to bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg 
+                hover:scale-110 transition-transform duration-300 ease-in-out"
+                onClick={(e) =>  handleAddtoCart(e, product)}>
+                  Add to Cart
+                </button>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
-};
-
-export default page;
+}

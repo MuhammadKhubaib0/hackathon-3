@@ -87,7 +87,7 @@ const page = () => {
           </div>
           <div className="max-sm:col-start-2 max-sm:row-start-2 max-sm:scale-75 max-sm:-translate-x-10">
             <h1 className="font-semibold text-[24px] max-sm:text-[20px]">Add A Product</h1>
-            <button className="h-10 w-60 rounded-[10px] bg-[#B88E2F] text-[#FFFFFF] font-semibold text-[14px] flex justify-between items-center px-4">
+            <button  className=" h-10 w-60 rounded-[10px] bg-[#B88E2F] text-[#FFFFFF] font-semibold text-[14px] flex justify-between items-center px-4">
               <h1>Choose a Product</h1>{" "}
               <Image
                 src="/images/icons/arrowdown.png"

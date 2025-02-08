@@ -15,7 +15,7 @@ const HeaderImage = () => {
           <h1 className="font-semibold text-5xl text-black">Checkout</h1>
           <p className="font-light text-lg text-black flex gap-4">
             <span className="font-medium">
-              <Link href="/">Home</Link>
+              <Link href="/HeroSection.tsx">Home</Link>
             </span>{" "}
             / <span className="">Checkout</span>
           </p>
