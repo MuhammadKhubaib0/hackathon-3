@@ -54,6 +54,7 @@ const CartPage = () => {
   
 const router = useRouter();
 
+
   const handleProceed = () => {
     swal.fire({
       title: "Proceed to Checkout",
