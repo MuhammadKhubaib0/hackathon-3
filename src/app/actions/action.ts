@@ -5,7 +5,7 @@ import { Product } from "../types/product";
 export const addToCart = (product: Product) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    const excistingProductIndex = cart.findIndex(item => item._id === product._id);
+    const excistingProductIndex = cart.findIndex((item: { _id: string; }) => item._id === product._id);
 
     if ( excistingProductIndex > -1) {
         cart[excistingProductIndex].Inventory += 1;
