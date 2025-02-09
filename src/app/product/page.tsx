@@ -1,5 +1,5 @@
 "use client";
-import RelatedProducts from "@/components/RelatedProducts";
+// import RelatedProducts from "@/components/RelatedProducts";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -188,7 +188,7 @@ const page = () => {
           />
         </div>
       </div>
-      <RelatedProducts />
+      {/* <RelatedProducts /> */}
     </div>
   );
 };
